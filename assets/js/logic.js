@@ -16,13 +16,13 @@ const submitBtnEl = document.getElementById("submit");
 
 // local variables
 const quizLocalStorageKey = "codeQuiz"; // key for the local storage
-const wrongAnswerTimePenalty = 15;
-let quizInterval = null; // store internal and clear it when it's needed
-let quizDurationInSec = 75;
-let questionsShownArr = []; // store questions that are shown by user
-let currentQuestion = null; // store the question that is currently shown to the user
-let numOfCorrectAnswer = 0; // store the number of question that user answers correctly
-let score = 0;
+const wrongAnswerTimePenalty = 15; // amount of time deducted from remaining time when wrong answer is given
+let quizInterval = null; // time internal for count down and clear it when it's needed
+let quizDurationInSec = 75; // total time for this quiz in second
+let questionsShownArr = []; // questions that are shown by user
+let currentQuestion = null; // the question that is currently shown to the user
+let numOfCorrectAnswer = 0; // the number of question that user answers correctly
+let score = 0; // score for the user after the quiz is finished
 
 //---------------Event Listeners -----------------------//
 startBtnEl.addEventListener("click", startTheQuiz);

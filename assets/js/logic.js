@@ -1,3 +1,4 @@
+// import all questions from questions module
 import questionsAllArr from "./questions.js";
 
 //--------------- Variable Declarations -----------------------//

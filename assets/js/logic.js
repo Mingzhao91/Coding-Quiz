@@ -20,16 +20,15 @@ let currentQuestion = null; // store the question that is currently shown to the
 startBtnEl.addEventListener("click", startTheQuiz);
 
 //---------------Functions -----------------------//
-// start the quiz
-function startTheQuiz() {
-  updateLayoutOnStart();
-  startTimer();
-  showQuestionToUser();
-}
-
+// clear quiz introduction
 function updateLayoutOnStart() {
   startScreenEl.classList.add("hide");
   questionBlockEl.classList.remove("hide");
+}
+
+// called after answering all questions or time is up
+function endQuiz() {
+  window.location.href = "highscores.html";
 }
 
 // start the countdown timer
@@ -50,41 +49,6 @@ function startTimer() {
       endQuiz();
     }
   }, 1000);
-}
-
-// clear an answer result in DOM
-function clearAnswerResult() {
-  feedbackEl.textContent = "";
-  feedbackEl.classList.add("hide");
-}
-
-// check answer and show the result
-function onOptionClick(event) {
-  // hide previous result
-  clearAnswerResult();
-  // get option from li dataset
-  const selectedOption = event.target.dataset.option;
-  // console.log("selectedOption: ", selectedOption);
-
-  // check if the user gives the correct answer
-  const isCorrect = currentQuestion.answer === selectedOption;
-  // console.log("isCorrect: ", isCorrect);
-
-  // deduct time as penalty if wrong answer is given
-  if (!isCorrect) {
-    quizDurationInSec -= wrongAnswerTimePenalty;
-  }
-
-  // show message to say if answer is right or not
-  feedbackEl.textContent = isCorrect ? "Correct!" : "Wrong!";
-  feedbackEl.classList.remove("hide");
-
-  // show new question to the user if there's any, otherwise, end the quiz
-  if (questionsArr.length > 0) {
-    showQuestionToUser();
-  } else {
-    endQuiz();
-  }
 }
 
 // show question to the user
@@ -131,6 +95,7 @@ function showQuestionToUser() {
       optionLiEl.classList.add("option");
       optionLiEl.textContent = option;
       optionLiEl.dataset.option = option;
+      // add click event listener to each option
       optionLiEl.addEventListener("click", onOptionClick);
       optionsOrderListEl.appendChild(optionLiEl);
     });
@@ -145,10 +110,49 @@ function showQuestionToUser() {
   }
 }
 
-function endQuiz() {
-  window.location.href = "highscores.html";
+// start the quiz
+function startTheQuiz() {
+  updateLayoutOnStart();
+  startTimer();
+  showQuestionToUser();
 }
 
+// get a random number below a given number
 function getRandomNumber(maxNum) {
   return Math.floor(Math.random() * maxNum);
+}
+
+// clear an answer result in DOM
+function clearAnswerResult() {
+  feedbackEl.textContent = "";
+  feedbackEl.classList.add("hide");
+}
+
+// check answer and show the result
+function onOptionClick(event) {
+  // hide previous result
+  clearAnswerResult();
+  // get option from li dataset
+  const selectedOption = event.target.dataset.option;
+  // console.log("selectedOption: ", selectedOption);
+
+  // check if the user gives the correct answer
+  const isCorrect = currentQuestion.answer === selectedOption;
+  // console.log("isCorrect: ", isCorrect);
+
+  // deduct time as penalty if wrong answer is given
+  if (!isCorrect) {
+    quizDurationInSec -= wrongAnswerTimePenalty;
+  }
+
+  // show message to say if answer is right or not
+  feedbackEl.textContent = isCorrect ? "Correct!" : "Wrong!";
+  feedbackEl.classList.remove("hide");
+
+  // show new question to the user if there's any, otherwise, end the quiz
+  if (questionsArr.length > 0) {
+    showQuestionToUser();
+  } else {
+    endQuiz();
+  }
 }

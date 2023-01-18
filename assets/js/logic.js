@@ -1,4 +1,4 @@
-import questionsArr from "./questions.js";
+import questionsAllArr from "./questions.js";
 
 //--------------- Variable Declarations -----------------------//
 // DOM elements
@@ -9,12 +9,16 @@ const questionBlockEl = document.getElementById("questions");
 const questionTitleEl = document.getElementById("question-title");
 const questionOptionsEl = document.getElementById("choices");
 const feedbackEl = document.getElementById("feedback");
+const endScreenEl = document.getElementById("end-screen");
+const finalScoreEl = document.getElementById("final-score");
 
 // local variables
 const wrongAnswerTimePenalty = 15;
+let quizInterval = null; // store internal and clear it when it's needed
 let quizDurationInSec = 75;
-let questionsSelectedArr = []; // store questions that are shown by user
+let questionsShownArr = []; // store questions that are shown by user
 let currentQuestion = null; // store the question that is currently shown to the user
+let numOfCorrectAnswer = 0; // store the number of question that user answers correctly
 
 //---------------Event Listeners -----------------------//
 startBtnEl.addEventListener("click", startTheQuiz);
@@ -28,7 +32,25 @@ function updateLayoutOnStart() {
 
 // called after answering all questions or time is up
 function endQuiz() {
-  window.location.href = "highscores.html";
+  // console.log("numOfCorrectAnswer: ", numOfCorrectAnswer);
+  // console.log("questionsAllArr: ", questionsAllArr);
+  // console.log("questionsShownArr: ", questionsShownArr);
+
+  // clear interval to stop the timer
+  clearInterval(quizInterval);
+
+  // get total number of questions by adding questions that are answered and questions that aren't answered
+  const totalNumOfQuestions = questionsAllArr.length + questionsShownArr.length;
+  const score = Math.floor((numOfCorrectAnswer / totalNumOfQuestions) * 100);
+  console.log("score: ", score);
+
+  // set final score to DOM element
+  finalScoreEl.textContent = score;
+
+  // hide questions div
+  questionBlockEl.classList.add("hide");
+  // show
+  endScreenEl.classList.remove("hide");
 }
 
 // start the countdown timer
@@ -38,7 +60,7 @@ function startTimer() {
   // update text for the countdown in the DOM
   timeSpanEl.textContent = quizDurationInSec;
 
-  const quizInterval = setInterval(function () {
+  quizInterval = setInterval(function () {
     if (quizDurationInSec > 0) {
       // decrement the coutdown and show to the user
       quizDurationInSec--;
@@ -58,15 +80,15 @@ function showQuestionToUser() {
   questionOptionsEl.innerHTML = "";
 
   // show question to user if there's remaning.
-  if (questionsArr.length > 0) {
+  if (questionsAllArr.length > 0) {
     // select a question randomly
-    const randomQuestionIndex = getRandomNumber(questionsArr.length);
-    const randomQuestion = questionsArr[randomQuestionIndex];
-    questionsSelectedArr.push(randomQuestion);
+    const randomQuestionIndex = getRandomNumber(questionsAllArr.length);
+    const randomQuestion = questionsAllArr[randomQuestionIndex];
+    questionsShownArr.push(randomQuestion);
     // remove selected question so that it wouldn't be shown up again
-    questionsArr.splice(randomQuestionIndex, 1);
-    // console.log("questionsArr: ", questionsArr);
-    // console.log("questionsSelectedArr: ", questionsSelectedArr);
+    questionsAllArr.splice(randomQuestionIndex, 1);
+    // console.log("questionsAllArr: ", questionsAllArr);
+    // console.log("questionsShownArr: ", questionsShownArr);
     // console.log("randomQuestion: ", randomQuestion);
 
     // put question in h2 tag
@@ -140,9 +162,12 @@ function onOptionClick(event) {
   const isCorrect = currentQuestion.answer === selectedOption;
   // console.log("isCorrect: ", isCorrect);
 
-  // deduct time as penalty if wrong answer is given
   if (!isCorrect) {
+    // deduct time as penalty if wrong answer is given
     quizDurationInSec -= wrongAnswerTimePenalty;
+  } else {
+    // increment the number of question that user gives correct answer
+    numOfCorrectAnswer += 1;
   }
 
   // show message to say if answer is right or not
@@ -150,7 +175,7 @@ function onOptionClick(event) {
   feedbackEl.classList.remove("hide");
 
   // show new question to the user if there's any, otherwise, end the quiz
-  if (questionsArr.length > 0) {
+  if (questionsAllArr.length > 0) {
     showQuestionToUser();
   } else {
     endQuiz();

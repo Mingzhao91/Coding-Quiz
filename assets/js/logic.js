@@ -1,16 +1,20 @@
 import questionsArr from "./questions.js";
 
-// Variables are declared here
+//--------------- Variable Declarations -----------------------//
+// DOM elements
 const startBtnEl = document.getElementById("start");
 const timeSpanEl = document.getElementById("time");
+// local variables
 const quizDurationInSec = 5;
 
+//---------------Event Listeners -----------------------//
 startBtnEl.addEventListener("click", startTheQuiz);
 
 function startTheQuiz() {
   startTimer();
 }
 
+//---------------Functions -----------------------//
 // start the countdown timer
 function startTimer() {
   // initilase the duration for the quiz
@@ -30,3 +34,6 @@ function startTimer() {
     }
   }, 1000);
 }
+
+// show question to the user
+function showQuestionToUser() {}

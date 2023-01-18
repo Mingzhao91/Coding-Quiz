@@ -16,13 +16,14 @@ let questionsSelectedArr = []; // store questions that are shown by user
 //---------------Event Listeners -----------------------//
 startBtnEl.addEventListener("click", startTheQuiz);
 
+//---------------Functions -----------------------//
+// start the quiz
 function startTheQuiz() {
   updateLayoutOnStart();
   startTimer();
   showQuestionToUser();
 }
 
-//---------------Functions -----------------------//
 function updateLayoutOnStart() {
   startScreenEl.classList.add("hide");
   questionBlockEl.classList.remove("hide");

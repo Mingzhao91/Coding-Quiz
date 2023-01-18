@@ -80,6 +80,7 @@ function showQuestionToUser() {
     const optionLiEl = document.createElement("li");
     optionLiEl.classList.add("option");
     optionLiEl.textContent = option;
+    optionLiEl.dataset.option = option;
     optionsOrderListEl.appendChild(optionLiEl);
   });
 

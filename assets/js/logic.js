@@ -2,6 +2,7 @@ import questionsArr from "./questions.js";
 
 //--------------- Variable Declarations -----------------------//
 // DOM elements
+const startScreenEl = document.getElementById("start-screen");
 const startBtnEl = document.getElementById("start");
 const timeSpanEl = document.getElementById("time");
 const questionBlockEl = document.getElementById("questions");
@@ -16,13 +17,17 @@ let questionsSelectedArr = []; // store questions that are shown by user
 startBtnEl.addEventListener("click", startTheQuiz);
 
 function startTheQuiz() {
-  questionBlockEl.className = questionBlockEl.className.replace("hide", "show");
-
+  updateLayoutOnStart();
   startTimer();
   showQuestionToUser();
 }
 
 //---------------Functions -----------------------//
+function updateLayoutOnStart() {
+  startScreenEl.classList.add("hide");
+  questionBlockEl.classList.remove("hide");
+}
+
 // start the countdown timer
 function startTimer() {
   // initilase the duration for the quiz

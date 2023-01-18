@@ -11,17 +11,23 @@ const questionOptionsEl = document.getElementById("choices");
 const feedbackEl = document.getElementById("feedback");
 const endScreenEl = document.getElementById("end-screen");
 const finalScoreEl = document.getElementById("final-score");
+const initialInputEl = document.getElementById("initials");
+const submitBtnEl = document.getElementById("submit");
 
 // local variables
+const quizLocalStorageID = "codeQuiz";
 const wrongAnswerTimePenalty = 15;
 let quizInterval = null; // store internal and clear it when it's needed
 let quizDurationInSec = 75;
 let questionsShownArr = []; // store questions that are shown by user
 let currentQuestion = null; // store the question that is currently shown to the user
 let numOfCorrectAnswer = 0; // store the number of question that user answers correctly
+let score = 0;
 
 //---------------Event Listeners -----------------------//
 startBtnEl.addEventListener("click", startTheQuiz);
+initialInputEl.addEventListener("focus", clearAnswerResult);
+submitBtnEl.addEventListener("click", submitInitals);
 
 //---------------Functions -----------------------//
 // clear quiz introduction
@@ -41,7 +47,8 @@ function endQuiz() {
 
   // get total number of questions by adding questions that are answered and questions that aren't answered
   const totalNumOfQuestions = questionsAllArr.length + questionsShownArr.length;
-  const score = Math.floor((numOfCorrectAnswer / totalNumOfQuestions) * 100);
+  // calculate percentage of correct answer as score
+  score = Math.floor((numOfCorrectAnswer / totalNumOfQuestions) * 100);
   console.log("score: ", score);
 
   // set final score to DOM element
@@ -71,6 +78,47 @@ function startTimer() {
       endQuiz();
     }
   }, 1000);
+}
+
+// store score in local storage
+function storeScore() {
+  let isStored = false;
+
+  if (initialInputEl.value.trim().length > 0) {
+    // get storage for this application
+    let storageObj = window.localStorage.getItem(quizLocalStorageID);
+    // create a new object if it doesn't exist, otherwise, transform it to an object
+    storageObj =
+      storageObj === null ? { scoreBoard: [] } : JSON.parse(storageObj);
+    // add user score in scoreBoard array
+    // console.log("storageObj: ", storageObj);
+
+    storageObj.scoreBoard.push({
+      name: initialInputEl.value,
+      score,
+      date: new Date()
+    });
+
+    // update storage
+    window.localStorage.setItem(quizLocalStorageID, JSON.stringify(storageObj));
+    isStored = true;
+  } else {
+    // ask user to provide initial if input field is empty after trimmming
+    window.alert("Please provide your initials");
+  }
+
+  return isStored;
+}
+
+// navigate to a page
+function navigate(url) {
+  window.location.href = url;
+}
+
+// handle initial submission
+function submitInitals() {
+  // if the score is stored, navigate user to highscores page
+  if (storeScore()) navigate("highscores.html");
 }
 
 // show question to the user

@@ -15,7 +15,7 @@ const initialInputEl = document.getElementById("initials");
 const submitBtnEl = document.getElementById("submit");
 
 // local variables
-const quizLocalStorageID = "codeQuiz";
+const quizLocalStorageKey = "codeQuiz"; // key for the local storage
 const wrongAnswerTimePenalty = 15;
 let quizInterval = null; // store internal and clear it when it's needed
 let quizDurationInSec = 75;
@@ -86,7 +86,7 @@ function storeScore() {
 
   if (initialInputEl.value.trim().length > 0) {
     // get storage for this application
-    let storageObj = window.localStorage.getItem(quizLocalStorageID);
+    let storageObj = window.localStorage.getItem(quizLocalStorageKey);
     // create a new object if it doesn't exist, otherwise, transform it to an object
     storageObj =
       storageObj === null ? { scoreBoard: [] } : JSON.parse(storageObj);
@@ -100,7 +100,10 @@ function storeScore() {
     });
 
     // update storage
-    window.localStorage.setItem(quizLocalStorageID, JSON.stringify(storageObj));
+    window.localStorage.setItem(
+      quizLocalStorageKey,
+      JSON.stringify(storageObj)
+    );
     isStored = true;
   } else {
     // ask user to provide initial if input field is empty after trimmming

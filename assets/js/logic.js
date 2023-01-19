@@ -98,6 +98,8 @@ function storeScore() {
       JSON.stringify(storageObj)
     );
     isStored = true;
+    // clear initials after storing it in local storage
+    initialInputEl.value = "";
   } else {
     // ask user to provide initial if input field is empty after trimmming
     window.alert("Please Enter initials.");

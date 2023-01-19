@@ -10,6 +10,7 @@ const quizLocalStorageKey = "codeQuiz"; // key for the local storage
 clearBtnEl.addEventListener("click", clearHighScores);
 
 //-------------------------------------------------- Functions --------------------------------------------------//
+// sort by score in descending order
 function sortScoreBoardDesc(item1, item2) {
   return item2.score - item1.score;
 }

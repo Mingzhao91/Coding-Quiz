@@ -1,13 +1,25 @@
 //--------------- Variable Declarations -----------------------//
 // DOM elements
-const highscoresEl = document.getElementById("highscores");
+const highscoresOrderListEl = document.getElementById("highscores");
+const clearBtnEl = document.getElementById("clear");
 
 // local variables
 const quizLocalStorageKey = "codeQuiz"; // key for the local storage
 
+//------------------------------------------------ Event Listeners ----------------------------------------------//
+clearBtnEl.addEventListener("click", clearHighScores);
+
 //-------------------------------------------------- Functions --------------------------------------------------//
 function sortScoreBoardDesc(item1, item2) {
   return item2.score - item1.score;
+}
+
+// clear local storage for this application
+function clearHighScores() {
+  // clear storage
+  window.localStorage.clear("quizLocalStorageKey");
+  // clear order list
+  highscoresOrderListEl.innerHTML = "";
 }
 
 // show scores in the DOM
@@ -30,7 +42,7 @@ function showScores() {
     storageObj.scoreBoard.forEach((item) => {
       const liEl = document.createElement("li");
       liEl.textContent = `${item.name} - ${item.score}`;
-      highscoresEl.appendChild(liEl);
+      highscoresOrderListEl.appendChild(liEl);
     });
   }
 }

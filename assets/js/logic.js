@@ -1,7 +1,7 @@
 // import all questions from questions module
 import questionsAllArr from "./questions.js";
 
-//--------------- Variable Declarations -----------------------//
+//---------------------------------------- Variable Declarations ----------------------------------------//
 // DOM elements
 const startScreenEl = document.getElementById("start-screen");
 const startBtnEl = document.getElementById("start");
@@ -25,12 +25,12 @@ let currentQuestion = null; // the question that is currently shown to the user
 let numOfCorrectAnswer = 0; // the number of question that user answers correctly
 let score = 0; // score for the user after the quiz is finished
 
-//---------------Event Listeners -----------------------//
+//---------------------------------------- Event Listeners ----------------------------------------//
 startBtnEl.addEventListener("click", startTheQuiz);
 initialInputEl.addEventListener("focus", clearAnswerResult);
 submitBtnEl.addEventListener("click", submitInitals);
 
-//---------------Functions -----------------------//
+//------------------------------------------- Functions ------------------------------------------//
 // clear quiz introduction
 function updateLayoutOnStart() {
   startScreenEl.classList.add("hide");
@@ -39,10 +39,6 @@ function updateLayoutOnStart() {
 
 // called after answering all questions or time is up
 function endQuiz() {
-  // console.log("numOfCorrectAnswer: ", numOfCorrectAnswer);
-  // console.log("questionsAllArr: ", questionsAllArr);
-  // console.log("questionsShownArr: ", questionsShownArr);
-
   // clear interval to stop the timer
   clearInterval(quizInterval);
 
@@ -50,8 +46,6 @@ function endQuiz() {
   const totalNumOfQuestions = questionsAllArr.length + questionsShownArr.length;
   // calculate percentage of correct answer as score
   score = Math.floor((numOfCorrectAnswer / totalNumOfQuestions) * 100);
-  console.log("score: ", score);
-
   // set final score to DOM element
   finalScoreEl.textContent = score;
 
@@ -92,8 +86,6 @@ function storeScore() {
     storageObj =
       storageObj === null ? { scoreBoard: [] } : JSON.parse(storageObj);
     // add user score in scoreBoard array
-    // console.log("storageObj: ", storageObj);
-
     storageObj.scoreBoard.push({
       name: initialInputEl.value,
       score,
@@ -139,19 +131,13 @@ function showQuestionToUser() {
     questionsShownArr.push(randomQuestion);
     // remove selected question so that it wouldn't be shown up again
     questionsAllArr.splice(randomQuestionIndex, 1);
-    // console.log("questionsAllArr: ", questionsAllArr);
-    // console.log("questionsShownArr: ", questionsShownArr);
-    // console.log("randomQuestion: ", randomQuestion);
-
     // put question in h2 tag
     questionTitleEl.textContent = randomQuestion.question;
-
     // build options in order list
     const optionsOrderListEl = document.createElement("ol");
     // make a copy of options
     let optionsList = JSON.parse(JSON.stringify(randomQuestion.options));
     let optionsRandomArr = [];
-
     // add questions in different order for each quiz
     while (optionsRandomArr.length !== randomQuestion.options.length) {
       const randomOptionIndex = getRandomNumber(optionsList.length);
@@ -159,10 +145,6 @@ function showQuestionToUser() {
       optionsRandomArr.push(randomOption);
       optionsList.splice(randomOptionIndex, 1);
     }
-
-    // console.log("randomQuestion: ", randomQuestion);
-    // console.log("optionsRandomArr: ", optionsRandomArr);
-
     // append options to the other list
     optionsRandomArr.forEach((option) => {
       const optionLiEl = document.createElement("li");
@@ -173,10 +155,6 @@ function showQuestionToUser() {
       optionLiEl.addEventListener("click", onOptionClick);
       optionsOrderListEl.appendChild(optionLiEl);
     });
-
-    // console.log("questionTitleEl: ", questionTitleEl);
-    // console.log("optionsOrderListEl: ", optionsOrderListEl);
-
     // append options to choice element in DOM
     questionOptionsEl.appendChild(optionsOrderListEl);
     // store the question that the user needs to answser
@@ -208,11 +186,8 @@ function onOptionClick(event) {
   clearAnswerResult();
   // get option from li dataset
   const selectedOption = event.target.dataset.option;
-  // console.log("selectedOption: ", selectedOption);
-
   // check if the user gives the correct answer
   const isCorrect = currentQuestion.answer === selectedOption;
-  // console.log("isCorrect: ", isCorrect);
 
   if (!isCorrect) {
     // deduct time as penalty if wrong answer is given

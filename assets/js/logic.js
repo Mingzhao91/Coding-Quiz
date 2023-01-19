@@ -100,7 +100,7 @@ function storeScore() {
     isStored = true;
   } else {
     // ask user to provide initial if input field is empty after trimmming
-    window.alert("Please provide your initials");
+    window.alert("Please Enter initials.");
   }
 
   return isStored;

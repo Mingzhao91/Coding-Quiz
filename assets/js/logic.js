@@ -182,6 +182,14 @@ function clearAnswerResult() {
   feedbackEl.classList.add("hide");
 }
 
+// play audio regarding to the right or wrong answer
+function playAudio(isCorrect) {
+  const audio = new Audio(
+    `./assets/sfx/${isCorrect ? "correct.wav" : "incorrect.wav"}`
+  );
+  audio.play();
+}
+
 // check answer and show the result
 function onOptionClick(event) {
   // hide previous result
@@ -198,6 +206,9 @@ function onOptionClick(event) {
     // increment the number of question that user gives correct answer
     numOfCorrectAnswer += 1;
   }
+
+  // play audio depending on whether the answer is correct or not
+  playAudio(isCorrect);
 
   // show message to say if answer is right or not
   feedbackEl.textContent = isCorrect ? "Correct!" : "Wrong!";
